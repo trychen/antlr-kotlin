@@ -49,6 +49,22 @@ allprojects {
     }
 }
 
+subprojects {
+    apply(plugin = "maven-publish")
+    configure<PublishingExtension> {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/trychen/antlr-kotlin")
+                credentials {
+                    username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                }
+            }
+        }
+    }
+}
+
 tasks.withType<Wrapper> {
     gradleVersion = "7.4.2"
     distributionType = Wrapper.DistributionType.ALL
